@@ -140,7 +140,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
                 <input
                   type="text"
                   required
-                  placeholder="Bhavya Sharma"
+                  placeholder="Bhavan "
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/50 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
@@ -244,7 +244,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
               onClick={() => handleQuickSeed('student')}
               className="px-3.5 py-1.5 text-xs font-semibold rounded-md border border-indigo-500/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/5 transition-colors cursor-pointer"
             >
-              Student Portal (Bhavya)
+              Student Portal (Bhavan)
             </button>
             <button
               type="button"
@@ -255,7 +255,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
             </button>
           </div>
           <p className="text-[10px] text-gray-400 mt-2.5">
-            * Seeding script will populate Bhavya's history with 4 gorgeous test analytics!
+            * Seeding script will populate Bhavan's history with 4 gorgeous test analytics!
           </p>
         </div>
       </div>

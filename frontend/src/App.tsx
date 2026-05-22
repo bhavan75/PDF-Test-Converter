@@ -29,10 +29,39 @@ const AppContent: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const { isActive: isQuizActive } = useQuiz();
 
+  // Initialize state from URL path
+  const getInitialView = () => {
+    const path = window.location.pathname;
+    if (path.startsWith('/user/')) return path.replace('/user/', '');
+    if (path.startsWith('/admin')) return 'admin';
+    return 'dashboard';
+  };
+
   // Navigation states
-  const [currentView, setCurrentView] = useState<string>('dashboard');
+  const [currentView, setCurrentView] = useState<string>(getInitialView());
   const [navigationParams, setNavigationParams] = useState<any>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Handle Browser Back/Forward buttons
+  React.useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      if (event.state && event.state.view) {
+        setCurrentView(event.state.view);
+        setNavigationParams(event.state.params);
+      } else {
+        setCurrentView(getInitialView());
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    
+    // Update URL on initial load if needed
+    if (!window.history.state && window.location.pathname !== '/login') {
+      const path = currentView === 'admin' ? '/admin' : `/user/${currentView}`;
+      window.history.replaceState({ view: currentView, params: null }, '', path);
+    }
+    
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [currentView]);
 
   // Custom State-based Router
   const handleNavigate = (view: string, params: any = null) => {
@@ -40,11 +69,23 @@ const AppContent: React.FC = () => {
     setNavigationParams(params);
     setMobileMenuOpen(false); // Close mobile navigation
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Update Browser URL Path
+    const path = view === 'admin' ? '/admin' : `/user/${view}`;
+    window.history.pushState({ view, params }, '', path);
   };
 
   const handleLoginSuccess = () => {
     setCurrentView('dashboard');
+    window.history.pushState({ view: 'dashboard' }, '', '/user/dashboard');
   };
+
+  // Sync unauthenticated state with /login URL
+  React.useEffect(() => {
+    if (!user && window.location.pathname !== '/login') {
+      window.history.replaceState({ view: 'login' }, '', '/login');
+    }
+  }, [user]);
 
   // If user is not authenticated, render login page
   if (!user) {

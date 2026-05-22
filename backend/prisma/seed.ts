@@ -14,7 +14,7 @@ async function main() {
     update: {},
     create: {
       email: 'student@pdftest.com',
-      name: 'Bhavya Sharma',
+      name: 'Bhavan',
       passwordHash,
       role: 'user',
     },
