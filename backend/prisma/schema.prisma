@@ -1,0 +1,74 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  passwordHash String
+  name         String
+  role         String        @default("user") // "user" or "admin"
+  createdAt    DateTime      @default(now())
+  attempts     TestAttempt[]
+  bookmarks    Bookmark[]
+}
+
+model PdfUpload {
+  id             String     @id @default(uuid())
+  filename       String
+  filepath       String
+  status         String     // "processing", "completed", "failed"
+  totalQuestions Int        @default(0)
+  topics         String     // Comma-separated list of extracted topics
+  createdAt      DateTime   @default(now())
+  questions      Question[]
+}
+
+model Question {
+  id             String      @id @default(uuid())
+  pdfId          String
+  pdf            PdfUpload   @relation(fields: [pdfId], references: [id], onDelete: Cascade)
+  questionNumber Int
+  text           String
+  optionA        String
+  optionB        String
+  optionC        String
+  optionD        String
+  correctAnswer  String      // "A", "B", "C", or "D"
+  explanation    String?
+  topic          String      @default("General")
+  difficulty     String      @default("Medium") // "Easy", "Medium", "Hard"
+  isApproved     Boolean     @default(true)
+  bookmarks      Bookmark[]
+}
+
+model TestAttempt {
+  id             String    @id @default(uuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pdfId          String
+  totalQuestions Int
+  timeLimit      Int       // in minutes
+  timeSpent      Int       // in seconds
+  score          Int       // number of correct answers
+  accuracy       Float     // percentage
+  mode           String    // "practice" or "exam"
+  answers        String    // JSON string containing questionId -> selectedAnswer & timeSpent
+  createdAt      DateTime  @default(now())
+}
+
+model Bookmark {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, questionId])
+}
