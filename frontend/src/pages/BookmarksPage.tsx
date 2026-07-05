@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext.js';
 import { Bookmark, FileText, Trash2, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
+import { API_BASE_URL } from '../config.js';
 
 export const BookmarksPage: React.FC = () => {
   const { token } = useAuth();
@@ -11,7 +12,7 @@ export const BookmarksPage: React.FC = () => {
   const fetchBookmarks = async () => {
     if (!token) return;
     try {
-      const res = await fetch('http://localhost:5000/api/bookmarks', {
+      const res = await fetch(`${API_BASE_URL}/api/bookmarks`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -32,7 +33,7 @@ export const BookmarksPage: React.FC = () => {
   const handleRemove = async (qId: string) => {
     if (!token) return;
     try {
-      const res = await fetch('http://localhost:5000/api/bookmarks/toggle', {
+      const res = await fetch(`${API_BASE_URL}/api/bookmarks/toggle`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext.js';
+import { API_BASE_URL } from '../config.js';
 import { 
   FileText, 
   Trash2, 
@@ -103,7 +104,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const res = await fetch('http://localhost:5000/api/admin/pdfs', {
+      const res = await fetch(`${API_BASE_URL}/api/admin/pdfs`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -137,7 +138,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
     setApprovalFilter('All');
     
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/pdfs/${pdf.id}/questions`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/pdfs/${pdf.id}/questions`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -158,7 +159,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
   const handleToggleApprove = async (q: QuestionItem) => {
     try {
       const newStatus = !q.isApproved;
-      const res = await fetch(`http://localhost:5000/api/admin/questions/${q.id}/approve`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/questions/${q.id}/approve`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
@@ -185,7 +186,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
     if (!window.confirm(`Are you sure you want to delete question #${questionNum}?`)) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/questions/${questionId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/questions/${questionId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -208,7 +209,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
     if (!window.confirm(`DANGER: Are you sure you want to delete the PDF "${filename}"?\n\nThis will cascade delete all extracted questions and historical test attempts for this PDF!`)) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/pdfs/${pdfId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/pdfs/${pdfId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -256,7 +257,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
     setErrorMessage(null);
 
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/questions/${editingQuestion.id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/questions/${editingQuestion.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

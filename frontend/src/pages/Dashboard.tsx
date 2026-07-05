@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext.js';
 import { Award, Clock, FileText, CheckCircle2, TrendingUp, ShieldAlert, Target, Sparkles, BookOpen, RefreshCw, ChevronRight } from 'lucide-react';
+import { API_BASE_URL } from '../config.js';
 
 interface DashboardProps {
   onNavigate: (view: string, extraParams?: any) => void;
@@ -57,13 +58,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
     if (!token) return;
     try {
       // 1. Fetch Analytics
-      const resAnal = await fetch('http://localhost:5000/api/attempts/analytics', {
+      const resAnal = await fetch(`${API_BASE_URL}/api/attempts/analytics`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const dataAnal = await resAnal.json();
       
       // 2. Fetch History
-      const resHist = await fetch('http://localhost:5000/api/attempts/history', {
+      const resHist = await fetch(`${API_BASE_URL}/api/attempts/history`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const dataHist = await resHist.json();

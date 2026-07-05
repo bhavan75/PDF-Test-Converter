@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
 import { useAuth } from './AuthContext.js';
+import { API_BASE_URL } from '../config.js';
 
 export interface Question {
   id: string;
@@ -52,7 +53,7 @@ interface QuizContextType {
 }
 
 const QuizContext = createContext<QuizContextType | undefined>(undefined);
-const API_URL = 'http://localhost:5000/api';
+const API_URL = `${API_BASE_URL}/api`;
 
 export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { token, user } = useAuth();

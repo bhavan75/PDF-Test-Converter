@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useAuth } from '../context/AuthContext.js';
 import { UploadCloud, CheckCircle2, ChevronRight, Terminal, Sparkles } from 'lucide-react';
+import { API_BASE_URL } from '../config.js';
 
 interface UploadPageProps {
   onNavigate: (view: string, extraParams?: any) => void;
@@ -78,7 +79,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({ onNavigate }) => {
       appendLog(`Initializing text character extraction layers...`);
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      const res = await fetch('http://localhost:5000/api/pdf/upload', {
+      const res = await fetch(`${API_BASE_URL}/api/pdf/upload`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`
@@ -108,7 +109,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({ onNavigate }) => {
       await new Promise(resolve => setTimeout(resolve, 600));
 
       // Fetch detailed counts
-      const resCount = await fetch(`http://localhost:5000/api/pdf/analysis/${data.pdfId}`, {
+      const resCount = await fetch(`${API_BASE_URL}/api/pdf/analysis/${data.pdfId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const counts = await resCount.json();

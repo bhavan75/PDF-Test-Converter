@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext.js';
 import { useQuiz } from '../context/QuizContext.js';
 import { CheckCircle2, XCircle, Info, Clock, Award, BarChart3, ChevronDown, ChevronUp, Printer, Home } from 'lucide-react';
+import { API_BASE_URL } from '../config.js';
 
 interface ResultPageProps {
   attemptId: string;
@@ -27,7 +28,7 @@ export const ResultPage: React.FC<ResultPageProps> = ({ attemptId, onNavigate })
       }
 
       try {
-        const res = await fetch(`http://localhost:5000/api/attempts/${attemptId}`, {
+        const res = await fetch(`${API_BASE_URL}/api/attempts/${attemptId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();

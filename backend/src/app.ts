@@ -14,9 +14,20 @@ import adminRoutes from './routes/admin-routes.js';
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Enable CORS
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://dfksjpdftcdbv.qzz.io',
+  'https://pdf-test-converter-dqrgdth7z-bhavan75s-projects.vercel.app'
+];
+
 app.use(cors({
-  origin: '*', // Allow all origins for local development, adjust as needed in prod
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
